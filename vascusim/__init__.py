@@ -7,9 +7,10 @@ Geometric data formats for GNN training.
 """
 
 import os
-import sys
-import numpy as np
 import platform
+import sys
+
+import numpy as np
 
 try:
     from ._version import version as __version__
@@ -20,10 +21,7 @@ except ImportError:
 package_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Import submodules for easy access
-from . import data
-from . import io
-from . import processing
-from . import utils
+from . import data, io, processing, utils
 
 __all__ = [
     "data",

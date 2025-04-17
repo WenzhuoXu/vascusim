@@ -9,7 +9,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Wenzhuo Xu", email = "YOUR_EMAIL@example.com"}
+    {name = "Wenzhuo Xu", email = "wzxu@cmu.edu"}
 ]
 dynamic = ["version"]
 classifiers = [
