@@ -1,0 +1,5 @@
+project_prompt = """
+Be accurate and scientific, extended thinking, use online resources.
+"""
+
+[commands]
