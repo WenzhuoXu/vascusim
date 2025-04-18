@@ -1,0 +1,103 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - 'vascusim/**/*.py'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - 'vascusim/**/*.py'
+      - '.github/workflows/docs.yml'
+  release:
+    types: [published]
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install .[docs]
+        
+    - name: Build documentation
+      run: |
+        cd docs
+        make clean
+        make html
+        
+    - name: Upload documentation artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation
+        path: docs/build/html/
+        
+  deploy:
+    needs: build
+    # Only deploy when pushing to main or on release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download documentation artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: documentation
+        path: docs/build/html
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/build/html
+        force_orphan: true
+        user_name: "github-actions[bot]"
+        user_email: "github-actions[bot]@users.noreply.github.com"
+        commit_message: "Deploy documentation: ${{ github.event.head_commit.message || 'Manual build' }}"
+    
+    - name: Create .nojekyll file
+      run: touch docs/build/html/.nojekyll
+        
+  check-links:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download documentation artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: documentation
+        path: docs/build/html
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+        
+    - name: Install link checker
+      run: |
+        python -m pip install --upgrade pip
+        pip install sphinx-linkcheck
+        
+    - name: Check documentation links
+      run: |
+        cd docs/build/html
+        sphinx-linkcheck -v .
+      continue-on-error: true  # Don't fail the build for external broken links

@@ -1,0 +1,121 @@
+/* Custom styles for VascuSim documentation */
+
+/* Improve code block appearance */
+div.highlight {
+    background-color: #f8f8f8;
+    border-radius: 4px;
+}
+
+div.highlight pre {
+    padding: 12px;
+    line-height: 1.5;
+}
+
+/* Improve table appearance */
+table.docutils {
+    border-collapse: collapse;
+    border: 1px solid #e1e4e5;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+table.docutils td, table.docutils th {
+    padding: 8px 16px;
+    border: 1px solid #e1e4e5;
+}
+
+table.docutils th {
+    background-color: #f3f6f6;
+    font-weight: bold;
+}
+
+/* Improve section headings */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+h1 {
+    font-size: 2em;
+    border-bottom: 1px solid #eaecef;
+    padding-bottom: 0.3em;
+}
+
+h2 {
+    font-size: 1.5em;
+    border-bottom: 1px solid #eaecef;
+    padding-bottom: 0.3em;
+}
+
+/* Improve note and warning boxes */
+div.admonition {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+}
+
+div.note {
+    background-color: #f0f7fb;
+    border-left: 4px solid #3498db;
+}
+
+div.warning {
+    background-color: #fff5f5;
+    border-left: 4px solid #e74c3c;
+}
+
+div.tip {
+    background-color: #f5fff0;
+    border-left: 4px solid #2ecc71;
+}
+
+/* Improve code example font */
+code, pre {
+    font-family: "SFMono-Regular", Menlo, Consolas, Monaco, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.9em;
+}
+
+/* Adjust copybutton */
+a.copybtn {
+    opacity: 0.3;
+    transition: opacity 0.3s ease-in-out;
+}
+
+div.highlight:hover a.copybtn,
+a.copybtn:hover {
+    opacity: 1;
+}
+
+/* Improve API documentation */
+dl.class, dl.function, dl.method, dl.attribute {
+    padding: 10px;
+    border-left: 3px solid #2980b9;
+    background-color: #f8f9fa;
+    margin-bottom: 20px;
+}
+
+dl.class > dt, dl.function > dt, dl.method > dt, dl.attribute > dt {
+    background-color: #e7f2fa;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+/* Improve sidebar navigation */
+.wy-menu-vertical a {
+    padding: 8px 16px;
+}
+
+.wy-menu-vertical a:hover {
+    background-color: #e3e3e3;
+}
+
+/* Fix for mobile view */
+@media screen and (max-width: 768px) {
+    .wy-nav-content-wrap {
+        margin-left: 0;
+    }
+}
