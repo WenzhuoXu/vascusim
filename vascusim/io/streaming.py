@@ -92,7 +92,7 @@ class DataStreamer(ABC):
             FileNotFoundError: If the file is not in cache and download_if_missing is False.
             ConnectionError: If there's an issue downloading the file.
         """
-        pass
+        raise NotImplementedError("get_file method must be implemented in subclasses")
 
     @abstractmethod
     def get_metadata(self, file_id: str) -> Dict:
@@ -108,7 +108,7 @@ class DataStreamer(ABC):
         Raises:
             FileNotFoundError: If the metadata file doesn't exist.
         """
-        pass
+        raise NotImplementedError("get_metadata method must be implemented in subclasses")
 
     def cleanup(self, strategy: str = "lru") -> None:
         """

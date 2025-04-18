@@ -251,7 +251,7 @@ class TestNASStreamerAPI:
     """Tests for the NASStreamer with API access mode."""
 
     # Test NAS configuration - update with actual values for real testing
-    NAS_IP = "192.168.1.100"  # Example IP, replace with actual
+    NAS_IP = "172.24.44.162"  # Example IP, replace with actual
     NAS_PORT = 5000
     NAS_USER = "wxu2"
     NAS_PASS = "Xu@913816"
@@ -431,7 +431,7 @@ class TestNASStreamerSMB:
     """Tests for the NASStreamer with SMB access mode."""
 
     # Test NAS configuration - update with actual values for real testing
-    NAS_IP = "192.168.1.100"  # Example IP, replace with actual
+    NAS_IP = "172.24.44.162"  # Example IP, replace with actual
     NAS_PORT = 445  # SMB port
     NAS_USER = "wxu2"
     NAS_PASS = "Xu@913816"
