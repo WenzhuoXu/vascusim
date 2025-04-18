@@ -1,0 +1,88 @@
+name: Publish
+
+on:
+  release:
+    types: [created]
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 0.1.0)'
+        required: false
+        default: ''
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # For trusted publishing
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build wheel twine setuptools_scm
+        
+    - name: Set version manually if provided
+      if: github.event.inputs.version != ''
+      run: |
+        echo "__version__ = '${{ github.event.inputs.version }}'" > vascusim/_version.py
+        echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+        
+    - name: Build package
+      run: |
+        python -m build
+        
+    - name: Check wheel and sdist
+      run: |
+        twine check dist/*
+        
+    - name: Display package files
+      run: |
+        ls -l dist/
+        
+    - name: Get current version
+      if: github.event.inputs.version == ''
+      run: |
+        VERSION=$(python -c "from vascusim import __version__; print(__version__)")
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Publish to TestPyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
+        skip-existing: true
+        
+    - name: Test installation from TestPyPI
+      run: |
+        pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ vascusim==${{ env.VERSION }}
+        python -c "import vascusim; print(vascusim.__version__)"
+        
+    - name: Publish to PyPI
+      if: github.event_name == 'release'
+      uses: pypa/gh-action-pypi-publish@release/v1
+      
+    - name: Update documentation
+      if: github.event_name == 'release'
+      run: |
+        pip install .[docs]
+        cd docs
+        make html
+        
+    - name: Deploy documentation to GitHub Pages
+      if: github.event_name == 'release'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/build/html
+        force_orphan: true
